@@ -1,0 +1,69 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: food-order-system
+
+  datasource:
+    # 支持 Docker 环境变量覆盖，本地开发保持默认值
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/order_management?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      database: 0
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/, file:${UPLOAD_PATH:./uploads}/
+    static-path-pattern: /static/**
+
+  mvc:
+    static-path-pattern: /static/**
+
+  # Spring AI 标准配置（兼容 OpenAI 协议，套壳对接 DeepSeek）
+  ai:
+    openai:
+      api-key: ${DEEPSEEK_API_KEY:sk-361828a31fda4881849836f93f07e591}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.7
+          max-tokens: 1024
+
+# 自定义配置
+upload:
+  path: ${UPLOAD_PATH:./uploads}
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: org.example.ordermanagement.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+jwt:
+  secret: ordermanagementjwtsecretkey1234567890
+  expiration: 86400000
+
+# AI 业务配置（保留业务防刷参数）
+ai:
+  chat:
+    # 每个用户保留最近 N 轮对话（1轮 = 用户消息 + AI回复）
+    max-history-rounds: 10
+    # Redis 会话过期时间（秒），默认 2 小时
+    session-ttl-seconds: 7200
+    # 每用户每日最多发送消息数
+    daily-limit: 100
