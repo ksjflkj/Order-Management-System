@@ -62,7 +62,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 jwt:
-  secret: ${JWT_SECRET:change-me-to-a-strong-32-byte-secret-key}
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 # AI 业务配置（保留业务防刷参数）
