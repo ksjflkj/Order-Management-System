@@ -11,8 +11,15 @@ spring:
     # 支持 Docker 环境变量覆盖，本地开发保持默认值
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/order_management?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
     username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    # Existing manually-created databases are marked as already migrated; empty databases still run V1+ scripts.
+    baseline-version: 4
 
   data:
     redis:
@@ -36,7 +43,7 @@ spring:
   # Spring AI 标准配置（兼容 OpenAI 协议，套壳对接 DeepSeek）
   ai:
     openai:
-      api-key: ${DEEPSEEK_API_KEY:sk-361828a31fda4881849836f93f07e591}
+      api-key: ${DEEPSEEK_API_KEY:}
       base-url: https://api.deepseek.com
       chat:
         options:
@@ -55,7 +62,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 jwt:
-  secret: ordermanagementjwtsecretkey1234567890
+  secret: ${JWT_SECRET}
   expiration: 86400000
 
 # AI 业务配置（保留业务防刷参数）
