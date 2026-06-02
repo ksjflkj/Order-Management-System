@@ -77,12 +77,8 @@ npm run dev
 建议先创建 `.env` 文件覆盖默认值，尤其是数据库密码、JWT 密钥和 DeepSeek API Key：
 
 ```bash
-cat > .env <<'EOF'
-MYSQL_ROOT_PASSWORD=请替换为强密码
-JWT_SECRET=请替换为至少32字节的强随机字符串
-DEEPSEEK_API_KEY=你的DeepSeek API Key
-EOF
-
+cp .env.example .env
+# 编辑 .env，替换 MYSQL_ROOT_PASSWORD、JWT_SECRET 和 DEEPSEEK_API_KEY 等配置
 docker compose up -d --build
 ```
 
